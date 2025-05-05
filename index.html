@@ -515,6 +515,66 @@
             pointer-events: none;
         }
         
+        /* Estilos para la sección de pregunta especial */
+        .pregunta-container {
+            margin: 2rem 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+        
+        .pregunta-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .pregunta-texto {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+        
+        .respuestas-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn-respuesta {
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            box-shadow: var(--shadow-sm);
+            min-width: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-respuesta.si {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .btn-respuesta.no {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .btn-respuesta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-respuesta:active {
+            transform: translateY(1px);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .container {
@@ -537,6 +597,12 @@
             
             .gallery-container {
                 height: 250px;
+            }
+            
+            .respuestas-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
             }
         }
         
@@ -573,6 +639,10 @@
             .gallery-caption {
                 padding: 1rem;
                 font-size: 1rem;
+            }
+            
+            .pregunta-texto {
+                font-size: 1.1rem;
             }
         }
         
@@ -675,9 +745,9 @@
             <button class="heart-btn" onclick="mostrarMensaje()">❤️</button>
             
             <div id="mensaje" class="mensaje">
-                <p>"Desde que llegaste a mi vida, cada día tiene más color. Eres la persona más increíble que he conocido."</p>
-                <p>"Tu sonrisa es mi lugar favorito en el mundo, y tu amor el regalo más valioso que he recibido."</p>
-                <p>"Gracias por ser exactamente como eres."</p>
+                <p>"Desde que llegaste a mi vida, cada día tiene en un completa intriga, estres e impaciencia, cada que hablamos siempre me dejas con ganas de saber mas de ti, pero saber que...? Por mas que lo odie, me encanta cada que lo haces. Eres la persona más increíble que he conocido, y que me encantaria seguir conociendo "</p>
+                <p>"Tu sonrisa es mi lugar favorito en el mundo, y ni hablar de tus cachetes, que aunque para ti sea algo que no te guste, a mi encantan demasiado."</p>
+                <p>"Gracias por ser exactamente como eres. Y siempre te lo he dicho, yo no quiero conocer a la ###### que tu les quieres mostrar a las personas, yo quiero conocer a esa ##### que se que se esconde por algun lada de esa muralla de hielo "</p>
             </div>
             
             <!-- Galería de fotos mejorada -->
@@ -719,9 +789,19 @@
             </button>
             
             <div id="extra-message" class="mensaje hidden">
-                <p>"Pase lo que pase, siempre recuerda lo especial que eres para mí."</p>
-                <p>"Te amo más de lo que las palabras pueden expresar."</p>
+                <p>"Pase lo que pase, siempre recuerda lo especial que eres para mí. Por que si, ok, lo admito. Has llegado a ser muy especial para mi."</p>
+                <p>"Espero que esta pequeño detalle sea capaz de expresar las palabras que no supe decirte en primer lugar."</p>
                 <p id="secret-message" style="display: none;">"Y este es nuestro mensaje secreto: Me gustas #######."</p>
+            </div>
+            
+            <!-- Sección de pregunta especial - Ahora al final -->
+            <div class="pregunta-container" id="pregunta-container">
+                <p class="pregunta-texto">Sé que es muy pronto para esto que yo siento pero...</p>
+                <h3>¿Me permites ser esa persona que esté a tu lado?</h3>
+                <div class="respuestas-container">
+                    <button class="btn-respuesta si" onclick="respuestaSi()">Sí ❤️</button>
+                    <button class="btn-respuesta no" onclick="respuestaNo()">No</button>
+                </div>
             </div>
         </div>
     </div>
@@ -752,6 +832,7 @@
         const extraMessage = document.getElementById('extra-message');
         const secretMessage = document.getElementById('secret-message');
         const audioControls = document.getElementById('audio-controls');
+        const preguntaContainer = document.getElementById('pregunta-container');
         let audioEnabled = true;
         
         // Inicialización
@@ -972,6 +1053,11 @@
                     fotoEspecial.classList.add('visible');
                     fotoEspecial.style.display = 'block';
                     
+                    // Mostrar pregunta especial después de 4 segundos
+                    setTimeout(() => {
+                        preguntaContainer.classList.add('visible');
+                    }, 4000);
+                    
                     // Mostrar botón de mensaje extra después de 3 segundos
                     setTimeout(() => {
                         extraMessageBtn.classList.remove('hidden');
@@ -987,6 +1073,43 @@
                 // Iniciar animación de la flor
                 dibujarFlor();
             }, 500);
+        }
+        
+        // Funciones para manejar las respuestas
+        function respuestaSi() {
+            confetti({
+                particleCount: 200,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ['#2ecc71', '#27ae60', '#ffffff'],
+                shapes: ['circle', 'heart']
+            });
+            
+            if (audioEnabled) document.getElementById('success-sound').play();
+            
+            preguntaContainer.innerHTML = `
+                <h3 style="color: #2ecc71;">¡Gracias por esta oportunidad! ❤️</h3>
+                <p>Prometo hacer todo lo posible para que no te arrepientas de esta decisión.</p>
+            `;
+            preguntaContainer.style.animation = 'subtlePulse 2s infinite';
+        }
+        
+        function respuestaNo() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff6b8b', '#ff8e9e', '#ff4757'],
+                shapes: ['heart']
+            });
+            
+            if (audioEnabled) document.getElementById('heart-sound').play();
+            
+            preguntaContainer.innerHTML = `
+                <h3 style="color: #ff6b8b;">Gracias por tu honestidad</h3>
+                <p>Aprecio mucho que hayas visto mi mensaje. Aunque no sea de la forma que esperaba, seguirás siendo una persona muy importante en mi vida.</p>
+                <p>Valoro mucho nuestra conexión y espero que podamos seguir compartiendo momentos especiales.</p>
+            `;
         }
         
         // Mostrar mensaje adicional
